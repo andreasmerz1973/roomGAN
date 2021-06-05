@@ -1,0 +1,5 @@
+./env
+./vgg
+./first_dataset
+./images_to_show
+*.pth
