@@ -10,14 +10,14 @@ class Dataset(BaseDataset):
         self.opt = opt
         self.root = opt.dataroot
         #self.dir_P = os.path.join(opt.dataroot, opt.phase) #Room images
-        self.dir_P = '/mnt/gpid08/users/jorge.pueyo/bedroom_train'
+        self.dir_P = '/mnt/gpid08/users/jorge.pueyo/ScanNet/images'
         #self.dir_K = os.path.join(opt.dataroot, opt.phase + 'K') #Layouts
-        self.dir_K = '/mnt/gpid08/users/jorge.pueyo/layout'
+        self.dir_K = '/mnt/gpid08/users/jorge.pueyo/ScanNet/layouts'
         #self.dir_SP = opt.dirSem #semantic
 
         self.SP_input_nc = opt.SP_input_nc
 
-        self.init_categories('train_split/masked_pair_list.csv')
+        self.init_categories('/mnt/gpid07/imatge/jorge.pueyo/ScanNet/pairs/pair_list.csv')
         self.transform = get_transform()
 
     def init_categories(self, pairLst):
@@ -54,10 +54,10 @@ class Dataset(BaseDataset):
         P2_img = Image.open(P2_path).convert('RGB')
         BP2_img = np.load(BP2_path)
 
-        BP1 = torch.from_numpy(BP1_img).float()/255 #h, w, c
+        BP1 = torch.from_numpy(BP1_img).float() #h, w, c
         #print("Tamaño de la pose 1:", BP1.size()) 
 
-        BP2 = torch.from_numpy(BP2_img).float()/255
+        BP2 = torch.from_numpy(BP2_img).float()
         #print("Tamaño de la pose 2:", BP2.size())
 
 

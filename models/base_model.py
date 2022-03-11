@@ -18,7 +18,7 @@ class BaseModel(nn.Module):
         self.isTrain = opt.isTrain
         self.Tensor = torch.cuda.FloatTensor if self.gpu_ids else torch.Tensor
         self.save_dir = os.path.join(opt.checkpoints_dir, opt.name)
-        self.vgg_path = '/home/usuaris/imatge/jorge.pueyo/RoomGAN/vgg/vgg19-dcbb9e9d.pth'
+        self.vgg_path = '/home/usuaris/imatge/jorge.pueyo/roomGAN/vgg/vgg19-dcbb9e9d.pth'
 
     def set_input(self, input):
         self.input = input

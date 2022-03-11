@@ -43,7 +43,7 @@ print(len(dataset))
 model = model.eval()
 print(model.training)
 
-opt.how_many = 10
+opt.how_many = 1000
 # test
 for i, data in enumerate(dataset):
     print(' process %d/%d img ..'%(i,opt.how_many), flush=True)

@@ -113,12 +113,16 @@ class Visualizer():
             win=self.display_id)
 
     # errors: same format as |errors| of plotCurrentErrors
-    def print_current_errors(self, epoch, i, errors, t):
+    def print_current_errors(self, epoch, i, errors, t, image_names):
         message = '(epoch: %d, iters: %d, time: %.3f) ' % (epoch, i, t)
         for k, v in errors.items():
             message += '%s: %.3f ' % (k, v)
-
         print(message)
+
+        message += f"Images: "
+        for image in image_names:
+            message += f"{image},"
+
         with open(self.log_name, "a") as log_file:
             log_file.write('%s\n' % message)
 
@@ -136,7 +140,7 @@ class Visualizer():
         for label, image_numpy in visuals.items():
             image_name = '%s_%s.jpg' % (image_path[0], label)
             save_path = os.path.join(image_dir, image_name)
-            print(save_path)
+            print('Images name: ', save_path)
             util.save_image(image_numpy, save_path)
 
             ims.append(image_name)

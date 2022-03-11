@@ -30,11 +30,11 @@ label_to_id = {
 #Stack masks script
 if __name__ == "__main__": 
 
-    folder_path = '/mnt/gpid08/users/jorge.pueyo/masks'
+    folder_path = '/mnt/gpid08/users/jorge.pueyo/ADEChallengeData2016_original/bedroom_resize/masks'
 
     for subfolder in tqdm(os.listdir(folder_path)):
 
-        if os.path.exists(os.path.join('/mnt/gpid08/users/jorge.pueyo/layout', subfolder + '.npy')):
+        if os.path.exists(os.path.join('/mnt/gpid08/users/jorge.pueyo/ADEChallengeData2016_original/bedroom_resize/layout', subfolder + '.npy')):
             continue
 
         mask = np.zeros((18, 256, 256), dtype=np.uint8)
@@ -52,7 +52,7 @@ if __name__ == "__main__":
             mask[label_to_id[label]] = mask_data
 
 
-        np.save(os.path.join('/mnt/gpid08/users/jorge.pueyo/layout', image_name), mask)
+        np.save(os.path.join('/mnt/gpid08/users/jorge.pueyo/ADEChallengeData2016_original/bedroom_resize/layout', image_name), mask)
 
 
 

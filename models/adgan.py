@@ -83,18 +83,21 @@ class TransferModel(BaseModel):
             self.criterionGAN = networks.GANLoss(use_lsgan=not opt.no_lsgan, tensor=self.Tensor)
 
             if opt.L1_type == 'origin':
-                self.criterionL1 = torch.nn.L1Loss()
+                #self.criterionL1 = torch.nn.L1Loss()
+                self.criterionL1 = torch.nn.MSELoss()
             elif opt.L1_type == 'l1_plus_perL1':
                 self.criterionL1 = L1_plus_perceptualLoss(opt.lambda_A, opt.lambda_B, opt.perceptual_layers, self.gpu_ids, opt.percep_is_l1)
+                #self.criterionL1 = torch.nn.MSELoss()
+
             else:
-                raise Excption('Unsurportted type of L1!')
+                raise Exception('Unsurportted type of L1!')
 
             if opt.use_cxloss:
                 self.CX_loss = CXLoss(sigma=0.5)
                 if torch.cuda.is_available():
                     self.CX_loss.cuda()
                 self.vgg = VGG()
-                self.vgg.load_state_dict(torch.load('/home/usuaris/imatge/jorge.pueyo/RoomGAN/vgg/vgg_conv.pth'))
+                self.vgg.load_state_dict(torch.load('/home/usuaris/imatge/jorge.pueyo/roomGAN/vgg/vgg_conv.pth'))
                 for param in self.vgg.parameters():
                     param.requires_grad = False
                 if torch.cuda.is_available():
@@ -141,9 +144,11 @@ class TransferModel(BaseModel):
         input_SP1 = input['SP1']
         self.input_SP1_set.resize_(input_SP1.size()).copy_(input_SP1)
 
+        
         self.image_paths = input['P1_path'][0] + '___' + input['P2_path'][0]
         self.person_paths = input['P1_path'][0]
 
+        self.all_image_paths = input['P1_path']
 
     def forward(self):
         self.input_P1 = Variable(self.input_P1_set)
@@ -199,9 +204,9 @@ class TransferModel(BaseModel):
                 cx_style_loss += self.CX_loss(vgg_style[i], vgg_fake[i])
             cx_style_loss *= self.opt.lambda_cx
 
-        #Añadir posible perceptual de capas superficiales
+            #Añadir posible perceptual de capas superficiales
 
-        pair_cxloss = cx_style_loss
+            pair_cxloss = cx_style_loss
 
         # L1 loss
         if self.opt.L1_type == 'l1_plus_perL1' :
@@ -304,7 +309,7 @@ class TransferModel(BaseModel):
             ret_errors['D_PP'] = self.loss_D_PP
         if self.opt.with_D_PB:
             ret_errors['D_PB'] = self.loss_D_PB
-        if self.opt.with_D_PB or self.opt.with_D_PP or self.opt.with_D_PS:
+        if self.opt.with_D_PB or self.opt.with_D_PP:
             ret_errors['pair_GANloss'] = self.pair_GANloss
 
         if self.opt.L1_type == 'l1_plus_perL1':
@@ -336,7 +341,6 @@ class TransferModel(BaseModel):
         vis[:, width*4:, :] = fake_p2
 
         ret_visuals = OrderedDict([('vis', vis)])
-        print(self.image_paths)
 
         return ret_visuals
 
